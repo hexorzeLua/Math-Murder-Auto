@@ -22,11 +22,11 @@ if not isSupportedGame then
     local Players = game:GetService("Players")
     local localPlayer = Players.LocalPlayer
     
-    -- Небольшая задержка чтобы GUI успело загрузиться
+    
     wait(1)
     
     localPlayer:Kick("Not supported game. Here is actual support games: https://discord.gg/YJxaKBcZbA")
-    return -- Останавливаем выполнение скрипта
+    return 
 end
 
 -- Конфигурация
@@ -37,7 +37,7 @@ local COIN_FARM_SPEED = 15
 -- RemoteEvents
 local GameEvent = ReplicatedStorage:WaitForChild("Events"):WaitForChild("GameEvent")
 
--- Список троллинг-фраз
+
 local TROLL_PHRASES = {
     "lol u mad ? why so ez",
     "math is too easy for me", 
@@ -51,7 +51,7 @@ local TROLL_PHRASES = {
     "i could do this in my sleep"
 }
 
--- Улучшенный математический решатель
+
 local function solveMathExpression(expression)
     -- Нормализация выражения
     local normalized = expression
@@ -66,7 +66,7 @@ local function solveMathExpression(expression)
     
     print("[DEBUG] Normalized: " .. normalized)
     
-    -- Извлекаем числа и операторы
+ 
     local numbers = {}
     local operators = {}
     
@@ -79,7 +79,7 @@ local function solveMathExpression(expression)
         end
     end
     
-    -- Если не удалось разобрать стандартным способом, пробуем ручной парсинг
+
     if #numbers == 0 then
         for num in normalized:gmatch("%d+") do
             table.insert(numbers, tonumber(num))
@@ -94,11 +94,11 @@ local function solveMathExpression(expression)
     print("[DEBUG] Numbers: " .. table.concat(numbers, ", "))
     print("[DEBUG] Operators: " .. table.concat(operators, ", "))
     
-    -- Вычисление выражения
+
     if #numbers >= 2 and #operators >= 1 then
         local result
         
-        -- Сначала умножение и деление
+  
         local i = 1
         while i <= #operators do
             if operators[i] == "*" or operators[i] == "/" then
@@ -119,7 +119,7 @@ local function solveMathExpression(expression)
             end
         end
         
-        -- Затем сложение и вычитание
+    
         result = numbers[1]
         for i = 1, #operators do
             if operators[i] == "+" then
@@ -129,7 +129,7 @@ local function solveMathExpression(expression)
             end
         end
         
-        -- Форматируем результат
+
         if result % 1 == 0 then
             result = tostring(math.floor(result))
         else
@@ -138,7 +138,7 @@ local function solveMathExpression(expression)
         
         return result
     else
-        -- Альтернативный метод
+
         local success, calcResult = pcall(function()
             local safeExpr = normalized
                 :gsub("([%d%)])%s*([%d%(])", "%1*%2")
@@ -164,12 +164,12 @@ local function solveMathExpression(expression)
     return nil
 end
 
--- Улучшенный решатель
+
 local function advancedMathSolver(expression)
     local result = solveMathExpression(expression)
     if result then return result end
     
-    -- Специфичные паттерны
+
     if expression:find("x") then
         local a, b = expression:match("(%d+)%s*x%s*(%d+)")
         if a and b then
@@ -189,7 +189,7 @@ local function advancedMathSolver(expression)
         end
     end
     
-    -- Простое извлечение чисел
+ 
     local numbers = {}
     for num in expression:gmatch("%d+") do
         table.insert(numbers, tonumber(num))
@@ -215,7 +215,7 @@ local function advancedMathSolver(expression)
     return nil
 end
 
--- Функция для поиска GUI элементов
+
 local function getCurrentQuestion()
     local success, question = pcall(function()
         return workspace.Map.Functional.Screen.SurfaceGui.MainFrame.MainGameContainer.MainTxtContainer.QuestionText.Text
@@ -227,7 +227,7 @@ local function getCurrentQuestion()
     return nil
 end
 
--- Функция для отправки ответа через RemoteEvent
+
 local function submitAnswer(answer)
     local args = {
         "submitAnswer",
@@ -237,9 +237,9 @@ local function submitAnswer(answer)
     print("[SUBMITTED] Answer: " .. tostring(answer))
 end
 
--- Улучшенная функция для экипировки томата
+
 local function equipTomato()
-    -- Пробуем разные возможные ивенты для экипировки
+   
     local possibleEvents = {
         {"EquipTomato", 1},
         {"EquipItem", 1},
@@ -264,9 +264,9 @@ local function equipTomato()
     return false
 end
 
--- Функция для кидания помидора в случайного игрока
+
 local function throwTomatoAtRandomPlayer()
-    -- Сначала пытаемся экипировать томат
+
     if not equipTomato() then
         print("[TOMATO] Cannot throw without equipping first")
         return
@@ -306,7 +306,7 @@ local function throwTomatoAtRandomPlayer()
     end
 end
 
--- Функция для поиска монеток (букв)
+
 local function findCoins()
     local coins = {}
     
@@ -325,11 +325,11 @@ local function findCoins()
     return coins
 end
 
--- Функция для сбора монетки (взаимодействия с буквой)
+
 local function collectCoin(coinPart)
     local args = {
         "CollectLetter",
-        coinPart.Parent.Name  -- Или другой идентификатор буквы
+        coinPart.Parent.Name  
     }
     
     local success = pcall(function()
@@ -340,7 +340,7 @@ local function collectCoin(coinPart)
         print("[COINS] Collected coin: " .. coinPart.Parent.Name)
         return true
     else
-        -- Пробуем альтернативные ивенты
+     
         local alternativeEvents = {
             {"PickupLetter", coinPart.Parent.Name},
             {"CollectItem", coinPart.Parent.Name},
@@ -361,7 +361,7 @@ local function collectCoin(coinPart)
     return false
 end
 
--- Функция для фарминга монеток с помощью TweenService
+
 local function startCoinFarming()
     local coins = findCoins()
     
@@ -370,7 +370,7 @@ local function startCoinFarming()
         return false
     end
     
-    -- Выбираем ближайшую монетку
+
     local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
     if not humanoidRootPart then
         return false
@@ -397,7 +397,7 @@ local function startCoinFarming()
     local distance = (humanoidRootPart.Position - targetPosition).Magnitude
     local duration = distance / COIN_FARM_SPEED
     
-    -- Создаем твин для плавного перемещения к монетке
+
     local tweenInfo = TweenInfo.new(
         duration,
         Enum.EasingStyle.Linear,
@@ -412,7 +412,7 @@ local function startCoinFarming()
     
     print("[COINS] Moving to coin at " .. tostring(targetPosition))
     
-    -- Ждем завершения твина
+
     local completed = false
     tween.Completed:Connect(function()
         completed = true
@@ -422,15 +422,14 @@ local function startCoinFarming()
     while not completed and (tick() - startTime) < duration + 2 do
         task.wait(0.1)
         
-        -- Проверяем, не появилась ли игра
+
         local currentQuestion = getCurrentQuestion()
         if currentQuestion and currentQuestion ~= "" then
             tween:Cancel()
             print("[COINS] Farming interrupted - game started")
             return true
         end
-        
-        -- Проверяем, не уничтожена ли монетка
+
         if not closestCoin or not closestCoin.Parent then
             tween:Cancel()
             print("[COINS] Coin disappeared")
@@ -448,7 +447,6 @@ local function startCoinFarming()
     return true
 end
 
--- Функция для отправки случайной фразы
 local function sendRandomPhrase()
     local randomIndex = math.random(1, #TROLL_PHRASES)
     local phrase = TROLL_PHRASES[randomIndex]
@@ -466,12 +464,10 @@ local function sendRandomPhrase()
     print("[VICTORY] " .. phrase)
 end
 
--- Функция для проверки, мертвы ли мы
 local function isDead()
     return not character or not character:FindFirstChild("Humanoid") or character.Humanoid.Health <= 0
 end
 
--- Основная функция для решения примеров и фарминга
 local function startMathSolver()
     local lastSolvedExpression = ""
     local consecutiveFails = 0
@@ -484,7 +480,7 @@ local function startMathSolver()
         local currentQuestion = getCurrentQuestion()
         
         if currentQuestion and currentQuestion ~= "" then
-            -- Есть активная игра с примером
+           
             if currentQuestion ~= lastSolvedExpression then
                 print("[NEW QUESTION] " .. currentQuestion)
                 
@@ -520,11 +516,11 @@ local function startMathSolver()
                 end
             end
         else
-            -- Нет активной игры
+         
             lastSolvedExpression = ""
             consecutiveFails = 0
             
-            -- Если мы мертвы - фармим монетки
+           
             if isDead() then
                 print("[COINS] Dead and no active game - farming coins")
                 local success = startCoinFarming()
@@ -532,25 +528,25 @@ local function startMathSolver()
                     task.wait(1)
                 end
             else
-                -- Если живы но нет игры - просто ждем
+               
                 task.wait(0.5)
             end
         end
     end
 end
 
--- Функция для авто-кидателя помидоров
+
 local function startTomatoThrower()
     print("Tomato Auto-Thrower started!")
     
-    -- Пытаемся экипировать томат при старте
+  
     equipTomato()
     task.wait(1)
     
     while true do
         local currentQuestion = getCurrentQuestion()
         
-        -- Кидаем помидоры только когда нет активной игры и мы живы
+
         if (not currentQuestion or currentQuestion == "") and not isDead() then
             throwTomatoAtRandomPlayer()
         end
@@ -559,18 +555,18 @@ local function startTomatoThrower()
     end
 end
 
--- Обработчик перерождения персонажа
+
 player.CharacterAdded:Connect(function(newCharacter)
     character = newCharacter
     humanoid = character:WaitForChild("Humanoid")
     print("[RESPAWN] Character respawned")
     
     task.wait(2)
-    -- Пытаемся экипировать томат после респавна
+ 
     equipTomato()
 end)
 
--- Запускаем оба скрипта
+
 task.wait(3)
 
 coroutine.wrap(function()
@@ -582,3 +578,7 @@ coroutine.wrap(function()
 end)()
 
 print("Both systems started successfully!")
+print('join for more in discord: https://discord.gg/YJxaKBcZbA')
+print('join for more in discord: https://discord.gg/YJxaKBcZbA')
+print('join for more in discord: https://discord.gg/YJxaKBcZbA')
+print('join for more in discord: https://discord.gg/YJxaKBcZbA')
