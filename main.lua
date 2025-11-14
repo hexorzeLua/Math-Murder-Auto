@@ -2,10 +2,32 @@ local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local supportedGameIds = {
+    127707120843339,  -- Замените на реальный ID игры
+}
+local currentGameId = game.PlaceId
+local isSupportedGame = false
 
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
+
+for _, id in pairs(supportedGameIds) do
+    if currentGameId == id then
+        isSupportedGame = true
+        break
+    end
+end
+if not isSupportedGame then
+    local Players = game:GetService("Players")
+    local localPlayer = Players.LocalPlayer
+    
+    -- Небольшая задержка чтобы GUI успело загрузиться
+    wait(1)
+    
+    localPlayer:Kick("Not supported game. Here is actual support games: https://discord.gg/YJxaKBcZbA")
+    return -- Останавливаем выполнение скрипта
+end
 
 -- Конфигурация
 local CHECK_INTERVAL = 0.1
