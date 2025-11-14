@@ -4,3 +4,8 @@ discord for more:
 https://discord.gg/YJxaKBcZbA
 https://discord.gg/YJxaKBcZbA
 https://discord.gg/YJxaKBcZbA
+
+
+INJECT ITS:
+print('join here https://discord.gg/YJxaKBcZbA')
+loadstring(game:HttpGet("https://raw.githubusercontent.com/hexorzeLua/Math-Murder-Auto/refs/heads/main/main.lua"))()
